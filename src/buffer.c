@@ -10,7 +10,7 @@ int rb_init(RingBuffer* rb, size_t size) {
     rb->data = (uint8_t*)malloc(size);
     rb->size = (unsigned)size;
     rb->head = 0U;
-    // rb->tail = 0U; 
+    rb->tail = 0U; 
     memset(rb->data, 0, size);
     return 0;
 }
@@ -19,7 +19,7 @@ void rb_free(RingBuffer* rb) {
     if (rb == NULL){
         return;
     }
-    if (rb->data) {
+    if (rb->data != NULL) {
         free(rb->data);
     }
 }
