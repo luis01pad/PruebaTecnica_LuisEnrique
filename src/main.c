@@ -7,9 +7,11 @@
 #include "crc.h"
 #include "config.h"
 
-static int running = 1;
+// Compartida entre hilos productor/consumidor
+static volatile int running = 1; 
 
-void* producer(void* arg) {
+// Vínculo interno: función no usada fuera del archivo
+static void* producer(void* arg) { 
     RingBuffer* rb = (RingBuffer*)arg;
     for (int i = 0; i < 1000; ++i) {
         rb_push(rb, (uint8_t)(i & 0xFF));
@@ -19,7 +21,8 @@ void* producer(void* arg) {
     return NULL;
 }
 
-void* consumer(void* arg) {
+// Vínculo interno: función no usada fuera del archivo
+static void* consumer(void* arg) { 
     RingBuffer* rb = (RingBuffer*)arg;
     uint8_t v;
     while (running || rb_count(rb) > 0) {
@@ -37,9 +40,10 @@ void* consumer(void* arg) {
 int main(int argc, char** argv) {
     if (argc < 2) {
         printf("Usage: %s <config>\n", argv[0]);
+        return 1; 
     }
 
-    AppConfig cfg;
+    AppConfig cfg= {0}; // Garantiza inicialización completa
     load_config((argc > 1) ? argv[1] : "tests/example.cfg", &cfg);
 
     RingBuffer rb;
@@ -49,14 +53,13 @@ int main(int argc, char** argv) {
     pthread_create(&th_prod, NULL, producer, &rb);
     pthread_create(&th_cons, NULL, consumer, &rb);
 
-    char data[32] = "hello";
+    const char data[32] = "hello"; 
     uint32_t c = crc32_compute(data, strlen(data));
     printf("CRC=%08x\n", c);
 
     pthread_join(th_prod, NULL);
     pthread_join(th_cons, NULL);
 
-    rb_free(&rb);
     rb_free(&rb);
 
     return 0;
