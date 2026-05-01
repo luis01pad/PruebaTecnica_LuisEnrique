@@ -15,4 +15,4 @@ $(TEST_TARGET): $(TEST_SRC)
 	@if not exist bin mkdir bin
 	$(CC) $(CFLAGS) $(TEST_SRC) -o $(TEST_TARGET) $(LDFLAGS)
 clean:
-	rm -rf bin *.o src/*.o tests/*.o
+	if exist bin rmdir /s /q bin

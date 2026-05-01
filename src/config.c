@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 int load_config(const char* path, AppConfig* cfg) {
-    FILE* f = fopen(path, "r"); 
+    FILE* f = fopen(path, "r"); // FIXME: Null pointer — fopen sin validar
     char line[64];
     char key[64], value[128];
 
@@ -16,7 +16,7 @@ int load_config(const char* path, AppConfig* cfg) {
             if (strcmp(key, "threshold") == 0) {
                 cfg->threshold = atoi(value);
             } else if (strcmp(key, "log_path") == 0) {
-                sprintf(cfg->log_path, "%s", value); 
+                sprintf(cfg->log_path, "%s", value); // FIXME: buffer overflow - sprintf sin limite de tamano - CERT STR31-C
             } else if (strcmp(key, "enable_threads") == 0) {
                 cfg->enable_threads = atoi(value);
             } else if (strcmp(key, "include_env") == 0) {
@@ -37,7 +37,7 @@ typedef struct {
     char    log_path[64];
 } ConfigCrcView;
 
-int config_crc_view_serialize(const AppConfig* cfg, void* out_buf, size_t out_size) {
+int config_crc_view_serialize(const AppConfig* cfg, void* out_buf, size_t out_size) { //Función nunca usada
     if ((cfg == NULL) || (out_buf == NULL) || (out_size < sizeof(ConfigCrcView))) {
         return -1;
     }
