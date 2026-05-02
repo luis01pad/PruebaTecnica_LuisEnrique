@@ -44,21 +44,42 @@ int main(int argc, char** argv) {
     }
 
     AppConfig cfg= {0}; // Garantiza inicialización completa
-    load_config((argc > 1) ? argv[1] : "tests/example.cfg", &cfg);
+
+    // Resultado cargar config
+    int status_load_config = load_config((argc > 1) ? argv[1] : "tests/example.cfg", &cfg);
+
+    if(status_load_config != 0) { 
+        fprintf(stderr, "Error: No se pudo cargar la configuración.\n");
+        return 1; 
+    }
 
     RingBuffer rb;
-    rb_init(&rb, 16);
+
+    //Valor size del buffer
+    static const size_t BUFFER_SIZE = 16;
+
+    if (rb_init(&rb, BUFFER_SIZE) != 0) {
+        fprintf(stderr, "Error al inicializar el buffer.\n");
+        return 1; 
+    }
 
     pthread_t th_prod, th_cons;
-    pthread_create(&th_prod, NULL, producer, &rb);
-    pthread_create(&th_cons, NULL, consumer, &rb);
-
+    if (pthread_create(&th_prod, NULL, producer, &rb) != 0) {
+        fprintf(stderr, "Error al crear primer hilo.\n");
+        return 1; 
+    }
+    if (pthread_create(&th_cons, NULL, consumer, &rb) != 0){
+        pthread_join(th_prod, NULL);
+        fprintf(stderr, "Error al crear segundo hilo.\n");
+        return 1; 
+    }
+    
+    pthread_join(th_prod, NULL);
+    pthread_join(th_cons, NULL);
+    
     const char data[32] = "hello"; 
     uint32_t c = crc32_compute(data, strlen(data));
     printf("CRC=%08x\n", c);
-
-    pthread_join(th_prod, NULL);
-    pthread_join(th_cons, NULL);
 
     rb_free(&rb);
 
