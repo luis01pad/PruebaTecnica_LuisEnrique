@@ -49,7 +49,7 @@ int main(int argc, char** argv) {
     int status_load_config = load_config((argc > 1) ? argv[1] : "tests/example.cfg", &cfg);
 
     if(status_load_config != 0) { 
-        fprintf(stderr, "Error: No se pudo cargar la configuración.\n");
+        fprintf(stderr, "Error: No se pudo cargar la configuracion.\n");
         return 1; 
     }
 
@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
     
     //Implementación CRC serializado
     ConfigCrcView buffer;
-    if (config_crc_view_serialize(&cfg, &buffer, sizeof(buffer)) != 0) {
+    if (config_crc_view_serialize(&cfg, &buffer, sizeof(buffer)) < 0) {
         fprintf(stderr, "Error: Serealizacion no hecha.\n");
         return 1; 
     }
