@@ -11,6 +11,9 @@ int rb_init(RingBuffer* rb, size_t size) {
     rb->size = (unsigned)size;
     rb->head = 0U;
     rb->tail = 0U; 
+    if (rb->data == NULL){
+        return -1;    
+    }
     memset(rb->data, 0, size);
     return 0;
 }
@@ -21,6 +24,7 @@ void rb_free(RingBuffer* rb) {
     }
     if (rb->data != NULL) {
         free(rb->data);
+        rb->data = NULL;
     }
 }
 
