@@ -40,7 +40,7 @@ int load_config(const char* path, AppConfig* cfg) {
     return 0;
 }
 
-int config_crc_view_serialize(const AppConfig* cfg, void* out_buf, size_t out_size) { //Función nunca usada
+int config_crc_view_serialize(const AppConfig* cfg, void* out_buf, size_t out_size) { 
     if ((cfg == NULL) || (out_buf == NULL) || (out_size < sizeof(ConfigCrcView))) {
         return -1;
     }

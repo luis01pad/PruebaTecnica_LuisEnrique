@@ -17,11 +17,13 @@ static void init_table(void) {
 }
 
 uint32_t crc32_compute(const void* data, size_t len) {
+    static int table_initialized = 0;
     if (data == NULL) {
         return 0;
     }
-    if (crc_table[1] == 0U) {
+    if (table_initialized == 0) {
         init_table();
+        table_initialized = 1;
     }
     const unsigned char* p = (const unsigned char*)data;
     uint32_t crc = 0xFFFFFFFFU;

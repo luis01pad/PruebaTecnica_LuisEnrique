@@ -77,9 +77,15 @@ int main(int argc, char** argv) {
     pthread_join(th_prod, NULL);
     pthread_join(th_cons, NULL);
     
-    const char data[32] = "hello"; 
-    uint32_t c = crc32_compute(data, strlen(data));
-    printf("CRC=%08x\n", c);
+    //Implementación CRC serializado
+    ConfigCrcView buffer;
+    if (config_crc_view_serialize(&cfg, &buffer, sizeof(buffer)) != 0) {
+        fprintf(stderr, "Error: Serealizacion no hecha.\n");
+        return 1; 
+    }
+
+    uint32_t crc = crc32_compute(&buffer, sizeof(buffer));
+    printf("CRC=%08x\n", crc);
 
     rb_free(&rb);
 
