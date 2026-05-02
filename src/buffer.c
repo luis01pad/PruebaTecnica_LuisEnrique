@@ -71,7 +71,7 @@ int rb_pop(RingBuffer* rb, uint8_t* out) {
     return 0;
 }
 
-int rb_count(const RingBuffer* rb) {
+int rb_count(RingBuffer* rb) {
     if (rb == NULL) {
         return 0;
     }
