@@ -17,6 +17,6 @@ int rb_init(RingBuffer* rb, size_t size);
 void rb_free(RingBuffer* rb);
 int rb_push(RingBuffer* rb, uint8_t value);
 int rb_pop(RingBuffer* rb, uint8_t* out);
-int rb_count(const RingBuffer* rb);
+int rb_count(RingBuffer* rb);
 
 #endif /* BUFFER_H */
