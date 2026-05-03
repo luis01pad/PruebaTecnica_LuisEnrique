@@ -31,6 +31,7 @@ int load_config(const char* path, AppConfig* cfg) {
                     return -1;
                 } 
                 strncpy(tmp, resultado, sizeof(tmp));
+                tmp[sizeof(tmp)-1] = '\0';
                 strncat(cfg->log_path, "/", sizeof(cfg->log_path) - strlen(cfg->log_path));
                 strncat(cfg->log_path, tmp, sizeof(cfg->log_path) - strlen(cfg->log_path));
             }

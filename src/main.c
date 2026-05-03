@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
     AppConfig cfg= {0}; // Garantiza inicialización completa
 
     // Resultado cargar config
-    int status_load_config = load_config((argc > 1) ? argv[1] : "tests/example.cfg", &cfg);
+    int status_load_config = load_config(argv[1], &cfg);
 
     if(status_load_config != 0) { 
         fprintf(stderr, "Error: No se pudo cargar la configuracion.\n");
